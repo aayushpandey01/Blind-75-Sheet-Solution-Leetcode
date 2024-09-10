@@ -17,3 +17,77 @@ public:
         
     }
 };
+
+
+Best time to buy and sell stocks
+
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int mini = prices[0];
+        int maxProfit = 0;
+        int n = prices.size();
+        for(int i = 0; i < n; i++){
+            int cost = prices[i] - mini;
+            maxProfit = max(maxProfit, cost);
+            mini = min(mini, prices[i]);
+        }
+
+        return maxProfit;
+        
+    }
+};
+
+Contains duplicate
+
+class Solution {
+public:
+    bool containsDuplicate(vector<int>& nums) {
+        map<int, int>m;
+        for(int i = 0; i < nums.size(); i++){
+            if(m[nums[i]] > 0) return true;
+            m[nums[i]]++;
+        }
+        return false;
+        
+    }
+};
+
+Product of Arrays except self
+
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        int n = nums.size(), i, j;
+        vector<int> L_product(n), R_product(n), res(n); 
+        L_product[0] = 1;
+        R_product[n-1] = 1;
+        for(i = 1; i < n; i++){
+            j = (n-1) - i;
+            L_product[i] = L_product[i-1] * nums[i-1];
+            R_product[j] = R_product[j+1] * nums[j+1];
+        }
+        for(i = 0; i < n; i++)
+            res[i] = L_product[i] * R_product[i];
+        return res;
+        
+    }
+};
+
+Maximum Subarray
+
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        int sum = 0;
+        int maxi = INT_MIN;
+        for(auto it : nums){
+            sum += it;
+            maxi = max(sum, maxi);
+            if(sum < 0) sum = 0;
+        }
+
+        return maxi;
+        
+    }
+};
