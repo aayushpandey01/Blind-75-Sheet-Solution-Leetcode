@@ -91,3 +91,98 @@ public:
         
     }
 };
+
+Search in Rotated Sorted Array
+
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        int n = nums.size();
+        int left = 0;
+        int right = n-1;
+
+        while(left <= right){
+            int mid = (left + right) / 2;
+            if(nums[mid] == target) return mid;
+            if(nums[left] <= nums[mid]){
+                if(nums[left] <= target && target <= nums[mid]){
+                    right = mid - 1;
+                }
+                else left = mid + 1;
+            }
+            else{
+                if(nums[mid] <= target && target <= nums[right]){
+                    left = mid + 1;
+                }
+                else right = mid -1;
+            }
+        }
+
+        return -1;
+        
+    }
+};
+
+3Sum
+
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        sort(nums.begin() , nums.end());    
+        if(nums.size() < 3){ 
+            return {};
+        }
+        if(nums[0] > 0){       
+            return {};
+        }
+        vector<vector<int>> answer;
+        for(int i = 0 ; i < nums.size() ; ++i){     
+            if(nums[i] > 0){    
+                break;
+            }
+            if(i > 0 && nums[i] == nums[i - 1]){  
+                continue;
+            }
+            int low = i + 1 , high = nums.size() - 1;   
+            int sum = 0;
+            while(low < high){                         
+                sum = nums[i] + nums[low] + nums[high];
+                if(sum > 0){   
+                    high--;
+                } else if(sum < 0){ 
+                    low++;
+                } else {
+                    answer.push_back({nums[i] , nums[low] , nums[high]});  
+                    int last_low_occurence = nums[low] , last_high_occurence = nums[high];  
+                    while(low < high && nums[low] == last_low_occurence){  
+                        low++;
+                    }
+                    while(low < high && nums[high] == last_high_occurence){
+                        high--;
+                    }
+                }
+            }
+        }
+        return answer;      
+    }
+};
+
+Container With Most Water
+
+class Solution {
+public:
+    int maxArea(vector<int>& height) {
+        int ans = 0;
+        int l = 0, r = height.size()-1;
+        while(l < r){
+            int h = min(height[l], height[r]);
+            int area = (r-l) * h;
+            ans = max(ans, area);
+            if(height[l] <= height[r]) l++;
+            else r--;
+        }
+
+        return ans;
+        
+    }
+};
