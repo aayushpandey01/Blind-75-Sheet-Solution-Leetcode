@@ -1,1 +1,97 @@
+Sum of Two Integers
 
+class Solution {
+public:
+    int getSum(int a, int b) {
+        int ans = 0;
+        bool x = 0, y = 0, carry = 0;
+
+        for(int c = 0; c < 32; c++){
+            x = a&1;
+            y = b&1;
+            ans = (x^y^carry) << c|ans;
+            carry = (x | y) & (carry | x) & (carry | y);
+
+            a >>= 1;
+            b >>= 1;
+        }
+
+        return ans;
+        
+    }
+};
+
+Number of 1 Bits
+
+class Solution {
+public:
+    int hammingWeight(int n) {
+        int count = 0;
+        while(n != 0){
+            if(n & 1){
+                count++;
+            }
+            n = n >> 1;
+        }
+
+        return count;
+        
+    }
+};
+
+Counting Bits
+
+class Solution {
+public:
+    vector<int> countBits(int n) {
+        int arr[n+1];
+        arr[0] = 0;
+        for(int i = 1; i <= n; i++){
+            arr[i] = arr[i/2] + i%2;
+        }
+        vector<int>sp;
+        for(int i = 0; i <= n; i++){
+            sp.push_back(arr[i]);
+        }
+
+        return sp;
+        
+    }
+};
+
+Missing Number
+
+class Solution {
+public:
+    int missingNumber(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        for(int i = 0; i < nums.size()-1; i++){
+            if(nums[i+1] != nums[i]+1){
+                return nums[i] + 1;
+            }
+        }
+        
+        if(nums[nums.size()-1] < nums.size())
+        return nums[nums.size()-1]+1;
+        return 0;
+    }
+};
+
+Reverse Bits
+
+class Solution {
+public:
+    uint32_t reverseBits(uint32_t n) {
+        uint32_t ans = 0, count = 32;
+
+        while(count){
+            ans += n&1;
+            count--;
+            n >>= 1;
+            if(count) ans <<= 1;
+        }
+
+        return ans;
+        
+    }
+};
