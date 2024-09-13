@@ -1,1 +1,63 @@
+Climbing Stairs
+
+class Solution {
+public:
+    int climbStairs(int n) {
+        int dp[46];
+        dp[1] = 1;
+        dp[2] = 2;
+        for(int i = 3; i <= n; ++i){
+            dp[i] = dp[i-1] + dp[i-2];
+        }
+
+        return dp[n];
+        
+    }
+};
+
+Coin Change
+
+class Solution {
+public:
+
+    int coinChange(vector<int>& coins, int amount) {
+        vector<int> dp(amount+1,amount+1);
+        dp[0] = 0;
+        for(int a{}; a<amount+1; a++){
+            for(int c: coins){
+                if(a-c >= 0){
+                    dp[a] = min(dp[a], 1+dp[a-c]);
+                }
+            }
+        }
+        return dp[amount] == amount+1 ? -1 : dp[amount];
+        
+    }
+};
+
+Longest Increasing Subsequence
+
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) {
+        int n = nums.size();
+        vector<int>dp(n,1);
+        int i = 1, j = 0;
+        for(int i = 1; i < n; i++){
+            while(j<i){
+                if(nums[i] > nums[j]){
+                    dp[i] = max(dp[i], dp[j]+1);
+                }
+                j++;
+            }
+            j = 0;
+        }
+
+        return *max_element(dp.begin(), dp.end());
+        
+    }
+};
+
+Longest Common Subsequence
+
 
