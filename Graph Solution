@@ -1,1 +1,166 @@
+Clone Graph
 
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    vector<Node*> neighbors;
+    Node() {
+        val = 0;
+        neighbors = vector<Node*>();
+    }
+    Node(int _val) {
+        val = _val;
+        neighbors = vector<Node*>();
+    }
+    Node(int _val, vector<Node*> _neighbors) {
+        val = _val;
+        neighbors = _neighbors;
+    }
+};
+*/
+
+class Solution {
+public:
+    Node* dfs(Node* cur,unordered_map<Node*,Node*>& mp)
+    {
+        vector<Node*> neighbour;
+        Node* clone=new Node(cur->val);
+        mp[cur]=clone;
+            for(auto it:cur->neighbors)
+            {
+                if(mp.find(it)!=mp.end())  
+                {
+                    neighbour.push_back(mp[it]);   
+                }
+                else
+                    neighbour.push_back(dfs(it,mp));
+            }
+            clone->neighbors=neighbour;
+            return clone;
+    }
+    Node* cloneGraph(Node* node) {
+        unordered_map<Node*,Node*> mp;
+        if(node==NULL)
+            return NULL;
+        if(node->neighbors.size()==0) 
+        {
+            Node* clone= new Node(node->val);
+            return clone; 
+        }
+        return dfs(node,mp);
+    }
+
+
+Course Schedule
+
+class Solution {
+public:
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        int counter = 0;
+        if(numCourses <= 0){
+            return true;
+        }
+
+        vector<int> inDegree(numCourses, 0);
+        vector<vector<int>> graph(numCourses);
+
+        for(const auto& edge : prerequisites){
+            int parent = edge[1];
+            int child = edge[0];
+            graph[parent].push_back(child);
+            inDegree[child]++;
+        }
+
+        queue<int> sources;
+        for(int i = 0; i < numCourses; i++){
+            if(inDegree[i] == 0){
+                sources.push(i);
+            }
+        }
+
+        while(!sources.empty()){
+            int course = sources.front();
+            sources.pop();
+            counter++;
+
+            for(int child : graph[course]){
+                inDegree[child]--;
+                if(inDegree[child] == 0){
+                    sources.push(child);
+                }
+            }
+        }
+
+        return counter == numCourses;
+        
+    }
+};
+
+
+Pacific Atlantic Water Flow
+
+class Solution {
+public:
+    vector<vector<int>> pacificAtlantic(vector<vector<int>>& matrix) {
+        
+        vector<vector<int>>ans;
+        if(matrix.size()<1)return ans;
+        vector<vector<int>>pacific(matrix.size(),vector<int>(matrix[0].size(),0));
+        vector<vector<int>>atlantic(matrix.size(),vector<int>(matrix[0].size(),0));
+        
+        for(int col=0;col<matrix[0].size();col++)
+        {
+            fnc(matrix,0,col,INT_MIN,pacific);
+            fnc(matrix,matrix.size()-1,col,INT_MIN,atlantic);
+            
+        }
+        
+        for(int row = 0;row<matrix.size();row++)
+        {
+             fnc(matrix,row,0,INT_MIN,pacific);
+            fnc(matrix,row,matrix[0].size()-1,INT_MIN,atlantic);
+        }
+        
+        for(int i=0;i<matrix.size();i++)
+        {
+            for(int j=0;j<matrix[0].size();j++)
+            {
+                if(pacific[i][j]==1 && atlantic[i][j]==1)
+                {
+                    vector<int>v(2);
+                    v[0]=i;
+                    v[1]=j;
+                    ans.push_back(v);
+                }
+            }
+        }
+        
+        
+        
+        return ans;
+    }
+    
+    void fnc(vector<vector<int>>& matrix,int i, int j,int prev,vector<vector<int>>& ocean)
+    {
+        if(i<0 || j<0 || i>=matrix.size() || j>=matrix[0].size())
+            return;
+        if(ocean[i][j]==1)
+            return;
+        if(matrix[i][j]<prev)
+            return;
+        
+        ocean[i][j]=1;
+        
+        fnc(matrix,i+1,j,matrix[i][j],ocean); 
+        fnc(matrix,i-1,j,matrix[i][j],ocean);
+        fnc(matrix,i,j+1,matrix[i][j],ocean);
+        fnc(matrix,i,j-1,matrix[i][j],ocean);
+        
+        
+        
+        
+        
+    }
+};
